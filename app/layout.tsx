@@ -2,6 +2,14 @@ import { ReactNode } from "react";
 import NavBar from "@/components/NavBar";
 import "./globals.css";
 import { exo2, orbitron } from "./fonts";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Indie Gamer",
+    template: "%s | Indie Gamer",
+  },
+};
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,12 +18,12 @@ interface LayoutProps {
 export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en" className={`${exo2.variable} ${orbitron.variable}`}>
-      <body className="bg-orange-50 flex flex-col min-h-screen px-4 py-2">
+      <body className="flex flex-col min-h-screen px-4 py-2 bg-orange-50">
         <header>
           <NavBar />
         </header>
-        <main className="grow py-3">{children}</main>
-        <footer className="border-t py-3 text-center text-xs text-slate-500">
+        <main className="py-3 grow">{children}</main>
+        <footer className="py-3 text-xs text-center border-t text-slate-500">
           Games data and images courtesy of
           <a
             href="https://rawg.io/"
