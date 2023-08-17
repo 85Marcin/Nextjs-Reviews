@@ -3,14 +3,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build"
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "gray-matter": "^4.0.3",
     "marked": "^7.0.2",
     "next": "^13.4.13",
-    "node-fetch": "^3.3.2",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -20,7 +21,11 @@
     "@types/node": "20.4.10",
     "@types/qs": "^6.9.7",
     "@types/react": "18.2.20",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
     "autoprefixer": "^10.4.14",
+    "eslint": "^8.47.0",
+    "eslint-config-next": "^13.4.16",
     "postcss": "^8.4.27",
     "tailwindcss": "^3.3.3",
     "typescript": "5.1.6"

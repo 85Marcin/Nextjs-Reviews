@@ -1,4 +1,5 @@
 import Heading from "@/components/Heading";
+import Image from "next/image";
 import ShareLinkButton from "@/components/ShareLinkButton";
 import { getReview, getSlugs } from "@/lib/reviews";
 import { Metadata } from "next";
@@ -31,16 +32,18 @@ export default async function ReviewPage({
   return (
     <>
       <Heading>{review.title}</Heading>
+      <p className="pb-3 font-semibold">{review.subtitle}</p>
       <div className="flex items-baseline gap-2">
         <p className="pb-2 italic">{review.date}</p>
         <ShareLinkButton />
       </div>
-      <img
+      <Image
         src={review.image}
         alt=""
         width="640"
         height="360"
         className="mb-2 rounded"
+        priority
       />
       <article
         dangerouslySetInnerHTML={{ __html: review.body }}
