@@ -3,6 +3,7 @@ import { marked } from "marked";
 import qs from "qs";
 
 const CMS_URL = "http://localhost:1337";
+export const CASHE_TAG_REVIEWS = "reviews";
 
 interface CmsItem {
   id: number;
@@ -21,13 +22,14 @@ export interface FullReview extends Review {
   body: string;
 }
 
-export async function getReview(slug: string): Promise<FullReview> {
+export async function getReview(slug: string): Promise<FullReview | null> {
   const { data } = await fetchReviews({
     filters: { slug: { $eq: slug } },
     fields: ["slug", "title", "subtitle", "publishedAt", "body"],
     populate: { image: { fields: ["url"] } },
     pagination: { pageSize: 1, withCount: false },
   });
+  if (data.length === 0) return null;
   const item = data[0];
   return {
     ...toReview(item),
@@ -58,7 +60,11 @@ async function fetchReviews(parameters: any) {
   const url =
     `${CMS_URL}/api/reviews?` +
     qs.stringify(parameters, { encodeValuesOnly: true });
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    next: {
+      tags: [CASHE_TAG_REVIEWS],
+    },
+  });
   if (!response.ok) {
     throw new Error(`CMS returned ${response.status} for ${url}`);
   }
