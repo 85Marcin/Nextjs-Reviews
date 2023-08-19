@@ -36,15 +36,25 @@ export async function getReview(slug: string): Promise<FullReview | null> {
     body: marked(item.attributes.body),
   };
 }
+interface PaginatedReviews {
+  reviews: Review[];
+  pageCount: number;
+}
 
-export async function getReviews(pageSize: number): Promise<Review[]> {
-  const { data } = await fetchReviews({
+export async function getReviews(
+  pageSize: number,
+  page?: number
+): Promise<PaginatedReviews> {
+  const { data, meta } = await fetchReviews({
     fields: ["slug", "title", "subtitle", "publishedAt"],
     populate: { image: { fields: ["url"] } },
     sort: ["publishedAt:desc"],
-    pagination: { pageSize },
+    pagination: { pageSize, page },
   });
-  return data.map(toReview);
+  return {
+    pageCount: meta.pagination.pageCount,
+    reviews: data.map(toReview),
+  };
 }
 
 export async function getSlugs(): Promise<string[]> {
@@ -60,6 +70,7 @@ async function fetchReviews(parameters: any) {
   const url =
     `${CMS_URL}/api/reviews?` +
     qs.stringify(parameters, { encodeValuesOnly: true });
+  // console.log("[fetchReviews]:", url);
   const response = await fetch(url, {
     next: {
       tags: [CASHE_TAG_REVIEWS],

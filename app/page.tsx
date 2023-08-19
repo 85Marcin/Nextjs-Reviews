@@ -4,7 +4,7 @@ import Image from "next/image";
 import { getReviews } from "@/lib/reviews";
 
 export default async function HomePage() {
-  const reviews = await getReviews(3);
+  const { reviews } = await getReviews(3);
 
   return (
     <>
