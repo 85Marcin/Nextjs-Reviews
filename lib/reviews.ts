@@ -1,3 +1,4 @@
+import "server-only";
 import { marked } from "marked";
 
 import qs from "qs";
@@ -21,6 +22,8 @@ export interface Review {
 export interface FullReview extends Review {
   body: string;
 }
+
+export type SearchableReview = Pick<Review, "slug" | "title">;
 
 export async function getReview(slug: string): Promise<FullReview | null> {
   const { data } = await fetchReviews({
@@ -91,4 +94,19 @@ function toReview(item: CmsItem): Review {
     date: attributes.publishedAt.slice(0, "yyyy-mm-dd".length),
     image: CMS_URL + attributes.image.data.attributes.url,
   };
+}
+
+export async function searchReviews(
+  query: string
+): Promise<SearchableReview[]> {
+  const { data } = await fetchReviews({
+    filters: { title: { $containsi: query } },
+    fields: ["slug", "title"],
+    sort: ["title"],
+    pagination: { pageSize: 5 },
+  });
+  return data.map(({ attributes }) => ({
+    slug: attributes.slug,
+    title: attributes.title,
+  }));
 }
